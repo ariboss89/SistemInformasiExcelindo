@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package View;
 
 import Model.Pengguna;
@@ -24,7 +23,7 @@ public class FormPengguna extends javax.swing.JFrame {
     private String alamat;
     private String password;
     private String konfirmasi;
-    
+
     Table table = new Table();
     Pengguna pengguna = new Pengguna();
     private String rs[][];
@@ -32,14 +31,13 @@ public class FormPengguna extends javax.swing.JFrame {
     String[] namaKolom = {"Nama", "Username", "Alamat"};
     int jmlKolom = namaKolom.length;
     int[] lebar = {200, 400, 400};
-    
+
     public FormPengguna() {
         initComponents();
         setLocationRelativeTo(this);
         refreshTable();
     }
 
-    
     private void refreshTable() {
         rs = pengguna.ShowData();
         table.SetTabel(jTable1, rs, namaKolom, jmlKolom, lebar);
@@ -48,6 +46,7 @@ public class FormPengguna extends javax.swing.JFrame {
         txtAlamat.setText("");
         txtUsername.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,7 +77,7 @@ public class FormPengguna extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAlamat = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -279,40 +278,41 @@ public class FormPengguna extends javax.swing.JFrame {
         password = jPasswordField1.getText().trim();
         konfirmasi = jPasswordField2.getText().trim();
         String kategori = "Admin";
-        
+
         pengguna.CekUsername(username);
-        
-        if(nama.equals("")){
+
+        if (nama.equals("")) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             txtNama.requestFocus();
-        }
-        else if(username.equals("")){
+        } else if (username.equals("")) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             txtUsername.requestFocus();
-        }
-        else if(password.equals("")){
+        } else if (password.equals("")) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             jPasswordField1.requestFocus();
-        }
-        else if(konfirmasi.equals("")){
+        } else if (konfirmasi.equals("")) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             jPasswordField2.requestFocus();
-        }
-        else if(!password.equals(konfirmasi)){
+        } else if (!password.equals(konfirmasi)) {
             JOptionPane.showMessageDialog(null, "Konfirmasi Password Berbeda");
             jPasswordField2.requestFocus();
-        }
-        else{
-            pengguna.Save(nama, username, alamat, password, konfirmasi, kategori);           
+        } else {
+            pengguna.Save(nama, username, alamat, password, konfirmasi, kategori);
         }
         refreshTable();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        username = txtUsername.getText().trim();
-        pengguna.Delete(username);
-        refreshTable();
+        int ok = JOptionPane.showConfirmDialog(null, "Apa Anda Yakin ?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            username = txtUsername.getText().trim();
+            pengguna.Delete(username);
+            refreshTable();
+        }
+        else{
+            
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked

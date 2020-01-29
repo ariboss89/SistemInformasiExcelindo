@@ -87,7 +87,8 @@ public class FormRiwayatPembelian extends javax.swing.JFrame {
         txtSupplier = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Form Riwayat Pembelian");
         setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));

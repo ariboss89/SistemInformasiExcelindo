@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package View;
 
 import Controller.Koneksi;
@@ -11,6 +10,7 @@ import Model.Barang;
 import Model.BarangMasuk;
 import Model.StokBarang;
 import Model.Table;
+import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,15 +32,15 @@ public class FormBarangMasuk extends javax.swing.JFrame {
     private String kategori;
     private int currentstok;
     private int stok;
-    
+
     Table table = new Table();
     BarangMasuk brg = new BarangMasuk();
     private String rs[][];
 
-    String[] namaKolom = {"Nama Barang", "Tanggal Masuk", "Kategori", "Stok"};
+    String[] namaKolom = {"Id", "Nama Barang", "Tanggal Masuk", "Kategori", "Stok"};
     int jmlKolom = namaKolom.length;
-    int[] lebar = {400, 400, 400, 300};
-    
+    int[] lebar = {200, 400, 400, 400, 300};
+
     public FormBarangMasuk() {
         initComponents();
         setLocationRelativeTo(this);
@@ -57,26 +57,47 @@ public class FormBarangMasuk extends javax.swing.JFrame {
         btnSave.setEnabled(true);
         jDateChooser1.setDate(null);
     }
-    
-    private void ShowBarang(){
+
+    private void ShowBarang() {
         java.sql.Connection conn = new Koneksi().connect();
-        try{
+        try {
             java.sql.Statement stmt = conn.createStatement();
             java.sql.ResultSet res = stmt.executeQuery("select *from barang");
-            while(res.next()){
+            while (res.next()) {
                 cbBarang.addItem(res.getString("nama"));
             }
-        }catch(SQLException ex){
-            
+        } catch (SQLException ex) {
+
         }
     }
-    
-    private void TambahStok(){
+
+    private void TambahStok() {
         nama = cbBarang.getSelectedItem().toString().trim();
         currentstok = brg.getStok();
         stok = Integer.parseInt(txtJumlahStok.getText().trim());
-        int stoknow = currentstok+stok;
+        int stoknow = currentstok + stok;
         brg.UpdateStok(nama, stoknow);
+    }
+
+    private void KurangStok() {
+        nama = brg.getNamaBarang();
+        currentstok = brg.getStokk();
+        stok = Integer.parseInt(txtJumlahStok.getText().trim());
+        int stoknow = currentstok - stok;
+        brg.UpdateStok(nama, stoknow);
+    }
+
+    private void ShowStokGudang() {
+        java.sql.Connection conn = new Koneksi().connect();
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            java.sql.ResultSet res = stmt.executeQuery("select *from barang where nama = '"+brg.getNamaBarang()+"'");
+            while (res.next()) {
+                brg.setStokk(res.getInt("stok"));
+            }
+        } catch (SQLException ex) {
+
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,7 +125,8 @@ public class FormBarangMasuk extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Form Barang Masuk");
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -138,6 +160,11 @@ public class FormBarangMasuk extends javax.swing.JFrame {
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTable1KeyPressed(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -294,39 +321,33 @@ public class FormBarangMasuk extends javax.swing.JFrame {
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
         tanggal = Date.valueOf(spf.format(jDateChooser1.getDate()));
         stok = Integer.parseInt(txtJumlahStok.getText().trim());
-        
-        if(cbBarang.equals("PILIH")){
+
+        if (cbBarang.equals("PILIH")) {
             JOptionPane.showMessageDialog(null, "Silahkan Pilih Nama Barang");
             cbBarang.requestFocus();
-        }
-        else if(tanggal.equals(null)){
+        } else if (tanggal.equals(null)) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             jDateChooser1.requestFocus();
-        }
-        else if(kategori.equals("")){
+        } else if (kategori.equals("")) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
-        } 
-        else if(stok==0){
+        } else if (stok == 0) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             txtJumlahStok.requestFocus();
-        }
-        else{
+        } else {
             brg.Save(nama, tanggal, kategori, stok);
             TambahStok();
             refreshTable();
         }
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int row = jTable1.getSelectedRow();
-        //txtNamaBarang.setText(jTable1.getValueAt(row, 0).toString());
-        //StokBarang.setId(txtNamaBarang.getText());
-        //txtNamaBarang.setText(jTable1.getValueAt(row, 1).toString());
-        //StokBarang.setNama(txtNamaBarang.getText());
-        //cbKategori.setSelectedItem(jTable1.getValueAt(row, 2).toString());
-        txtJumlahStok.setText(jTable1.getValueAt(row, 3).toString());
+        brg.setIdBarangMasuk(jTable1.getValueAt(row, 0).toString());
+        brg.setNamaBarang(jTable1.getValueAt(row, 1).toString());
+        ShowStokGudang();
+        txtJumlahStok.setText(jTable1.getValueAt(row, 4).toString());
         btnSave.setEnabled(false);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -337,17 +358,32 @@ public class FormBarangMasuk extends javax.swing.JFrame {
     private void cbBarangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbBarangItemStateChanged
         // TODO add your handling code here:
         java.sql.Connection conn = new Koneksi().connect();
-        try{
+        try {
             java.sql.Statement stmt = conn.createStatement();
-            java.sql.ResultSet res = stmt.executeQuery("select *from barang where nama = '"+cbBarang.getSelectedItem()+"'");
-            while(res.next()){
+            java.sql.ResultSet res = stmt.executeQuery("select *from barang where nama = '" + cbBarang.getSelectedItem() + "'");
+            while (res.next()) {
                 txtKategori.setText(res.getString("kategori"));
                 brg.setStok(res.getInt("stok"));
             }
-        }catch(SQLException ex){
-            
+        } catch (SQLException ex) {
+
         }
     }//GEN-LAST:event_cbBarangItemStateChanged
+
+    private void jTable1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == KeyEvent.VK_DELETE) {
+            int ok = JOptionPane.showConfirmDialog(null, "Apa Anda Yakin ?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (ok == 0) {
+                String Id = brg.getIdBarangMasuk();
+                brg.Delete(Id);
+                KurangStok();
+                refreshTable();
+            } else {
+
+            }
+        }
+    }//GEN-LAST:event_jTable1KeyPressed
 
     /**
      * @param args the command line arguments
