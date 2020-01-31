@@ -126,12 +126,30 @@ public class FormTransaksi extends javax.swing.JFrame {
 
     private void UpdateStokBarangMasuk() {
         nama = cbBarang.getSelectedItem().toString().trim();
+        trc.setNamaBarang(nama);
         int currentstok = trc.getStokBarangMasuk();
         int stok = Integer.parseInt(txtJumlah.getText().trim());
         int stoknow = currentstok - stok;
         tanggal = trc.getTanggalMasuk();
 
-        trc.UpdateStokBarangMasuk(nama, stoknow, tanggal);
+        if (currentstok <= stok) {
+            int test = stok - currentstok;
+            int test2 = currentstok - currentstok;
+            trc.UpdateStokBarangMasuk(nama, test2, tanggal);
+            UpdateStokBarang();
+            trc.setPenampung(test);
+            
+            ShowStokBarangMasuk();
+            int current = trc.getStokBarangMasuk();
+            int stokk = trc.getPenampung();
+            int stoknoww = current - stokk;
+            tanggal = trc.getTanggalMasuk();
+            trc.UpdateStokBarangMasuk(nama, stoknoww, tanggal);
+            UpdateStokBarang();
+        }
+        else{
+            trc.UpdateStokBarangMasuk(nama, stok, tanggal);
+        }
     }
 
     private void UpdateStokBarang() {
@@ -284,6 +302,17 @@ public class FormTransaksi extends javax.swing.JFrame {
             refreshTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void ShowDataNullAndDeleteSoon() {
+        java.sql.Connection conn = new Koneksi().connect();
+        try {
+            java.sql.Statement stmt = conn.createStatement();
+            stmt.executeUpdate("delete from barangmasuk where nama = '" + cbBarang.getSelectedItem() + "' and stok <= '0'");
+
+        } catch (SQLException ex) {
+
         }
     }
 
@@ -724,6 +753,7 @@ public class FormTransaksi extends javax.swing.JFrame {
         total = Integer.parseInt(txtTotal.getText().trim());
         stokbarang = trc.getStokBarang();
         minstok = trc.getStokBarang();
+        int hitung = stokbarang-minstok;
 
         if (nama.equals("")) {
             JOptionPane.showMessageDialog(null, "Silahkan Pilih Barang Yang Ingin di Pesan");
@@ -737,7 +767,7 @@ public class FormTransaksi extends javax.swing.JFrame {
         } else if (total == 0) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
             txtTotal.requestFocus();
-        } else if (jumlah > stokbarang) {
+        } else if (jumlah > hitung) {
             JOptionPane.showMessageDialog(null, "Transaski Tidak dapat Dilanjutkan dikarenakan Stok Kurang");
             txtJumlah.requestFocus();
 
@@ -747,7 +777,6 @@ public class FormTransaksi extends javax.swing.JFrame {
 
         } else {
             trc.SaveDetail(iddetail, idtransaksi, nama, harga, jumlah, total);
-            UpdateStokBarang();
             UpdateStokBarangMasuk();
             SumJumlahItem();
             SumTotalBelanja();
@@ -849,7 +878,7 @@ public class FormTransaksi extends javax.swing.JFrame {
 
     private void cbNamaPelangganKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbNamaPelangganKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()== KeyEvent.VK_ENTER){
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
             txtBayar.requestFocus();
         }
     }//GEN-LAST:event_cbNamaPelangganKeyPressed

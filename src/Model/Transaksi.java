@@ -31,7 +31,25 @@ public class Transaksi {
     private int stokBarang;
     private int minStokBarang;
     private Date tanggal;
+    private int Penampung;
+    private String namaBarang;
 
+    public String getNamaBarang() {
+        return namaBarang;
+    }
+
+    public void setNamaBarang(String namaBarang) {
+        this.namaBarang = namaBarang;
+    }
+
+    public int getPenampung() {
+        return Penampung;
+    }
+
+    public void setPenampung(int Penampung) {
+        this.Penampung = Penampung;
+    }
+    
     public Date getTanggal() {
         return tanggal;
     }
@@ -117,7 +135,7 @@ public class Transaksi {
             st.executeUpdate(query);
             st.close();
             con.conn.close();
-            JOptionPane.showMessageDialog(null, "Data di Simpan");
+            JOptionPane.showMessageDialog(null, "Tunggu Sebentar ... , Struk Akan di Cetak");
         } catch (SQLException e) {
         }
     }
@@ -131,7 +149,7 @@ public class Transaksi {
             st.executeUpdate(query);
             st.close();
             con.conn.close();
-            JOptionPane.showMessageDialog(null, "Data di Simpan");
+            JOptionPane.showMessageDialog(null, "Barang di Tambahkan");
         } catch (SQLException e) {
         }
     }
