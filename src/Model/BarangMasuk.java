@@ -27,6 +27,15 @@ public class BarangMasuk {
     private String IdBarangMasuk;
     private String NamaBarang;
     private int Stokk;
+    private int idsupplier;
+
+    public int getIdsupplier() {
+        return idsupplier;
+    }
+
+    public void setIdsupplier(int idsupplier) {
+        this.idsupplier = idsupplier;
+    }
 
     public int getStokk() {
         return Stokk;
@@ -60,12 +69,12 @@ public class BarangMasuk {
         this.stok = stok;
     }
     
-    public void Save(String nama, Date tanggal, String kategori, int stok) {
+    public void Save(String nama, Date tanggal, String kategori, int stok, String perusahaan) {
         con = new Koneksi();
         con.connect();
         try {
             st = con.conn.createStatement();
-            query = "insert into barangmasuk(nama, tanggal, kategori,stok)values('" + nama + "','" + tanggal + "','" + kategori + "','" + stok + "')";
+            query = "insert into barangmasuk(nama, tanggal, kategori,stok, perusahaan)values('" + nama + "','" + tanggal + "','" + kategori + "','" + stok + "','"+perusahaan+"')";
             st.executeUpdate(query);
             st.close();
             con.conn.close();
