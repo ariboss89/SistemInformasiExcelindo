@@ -88,7 +88,7 @@ public class FormRiwayatPembelian extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Form Riwayat Pembelian");
+        setTitle("Form Riwayat Pemesanan");
         setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));

@@ -261,7 +261,7 @@ public class FormMenuUtama extends javax.swing.JFrame {
         });
         jMenu2.add(menuRiwayat);
 
-        jMenuItem2.setText("RIWAYAT PEMBELIAN");
+        jMenuItem2.setText("RIWAYAT PEMESANAN");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);

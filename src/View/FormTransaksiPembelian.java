@@ -245,7 +245,7 @@ public class FormTransaksiPembelian extends javax.swing.JFrame {
         cbNamaPelanggan = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Form Transaksi Pembelian");
+        setTitle("Form Transaksi Pemesanan");
         setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
